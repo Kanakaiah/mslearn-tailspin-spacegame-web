@@ -60,7 +60,7 @@ steps:
 - task: CmdLine@2
   inputs:
     script: |
-      MSYS2_ARG_CONV_EXCL="*" $HOME/.dotnet/tools/dotnet-sonarscanner begin \
+      $HOME/.dotnet/tools/dotnet-sonarscanner begin \
       /k:"Kanakaiah_mslearn-tailspin-spacegame-web" \
       /d:sonar.host.url="https://sonarcloud.io" \
       /d:sonar.login="e1acf4c16129e12fa874a68d9c385e5952388486" \
