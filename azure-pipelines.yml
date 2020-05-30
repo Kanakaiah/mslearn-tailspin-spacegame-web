@@ -43,17 +43,32 @@ steps:
     command: 'restore'
     projects: '**/*.csproj'
 
+# - task: SonarCloudPrepare@1
+#   displayName: 'Prepare SonarCloud analysis'
+#   inputs:
+#     SonarCloud: 'SonarCloud connection 1'
+#     organization: '$(SonarOrganization)'
+#     scannerMode: 'MSBuild'
+#     projectKey: '$(SonarProjectKey)'
+#     projectName: '$(SonarProjectName)'
+#     projectVersion: '$(Build.BuildNumber)'
+#     extraProperties: |
+#      sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestResults/Coverage/coverage.opencover.xml
+#      sonar.exclusions=**/wwwroot/lib/**/*
+#      sonar.host.url=https://sonarcloud.io
 
-- task: SonarCloudPrepare@1
+- task: CmdLine@2
   inputs:
-    SonarCloud: 'SonarCloud connection 1'
-    organization: 'kanakaiah'
-    scannerMode: 'MSBuild'
-    projectKey: 'SonarProjectKeyKanakaiah_mslearn-tailspin-spacegame-web'
-    extraProperties: |
-      sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestResults/Coverage/coverage.opencover.xml
-      sonar.exclusions=**/wwwroot/lib/**/*
-      sonar.host.url=https://sonarcloud.io
+    script: |
+      MSYS2_ARG_CONV_EXCL="*" $HOME/.dotnet/tools/dotnet-sonarscanner begin \
+      /k:"Kanakaiah_mslearn-tailspin-spacegame-web" \
+      /d:sonar.host.url="https://sonarcloud.io" \
+      /d:sonar.login="e1acf4c16129e12fa874a68d9c385e5952388486" \
+      /d:sonar.cs.opencover.reportsPaths="$(Build.SourcesDirectory)/TestResults/Coverage/coverage.opencover.xml" \
+      /d:sonar.exclusions="**/wwwroot/lib/**/*" \
+      /o:"kanakaiah"
+
+
 - task: DotNetCoreCLI@2
   displayName: 'Build the project - $(buildConfiguration)'
   inputs:
